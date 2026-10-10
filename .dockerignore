@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+.git/
+.pytest_cache/
+.coverage
+.env

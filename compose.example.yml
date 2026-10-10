@@ -1,0 +1,29 @@
+services:
+  servarr-tools-ui:
+    image: ghcr.io/vladido/servarr-tools-ui:latest
+    restart: unless-stopped
+    environment:
+      ROLLARR_URL: http://rollarr-controller:8080
+      NORMALIZER_URL: http://torrent-name-normalizer:8077
+      AUTO_ADD_URL: http://sonarr-series-auto-add:8078
+      SONARR_URL: http://sonarr:8989
+      SONARR_API_KEY: ${SONARR_API_KEY:?set SONARR_API_KEY}
+      SERVARR_TOOLS_TOKEN: ${SERVARR_TOOLS_TOKEN:?set SERVARR_TOOLS_TOKEN}
+      SERVARR_TOOLS_ALLOWED_HOSTS: ${SERVARR_TOOLS_ALLOWED_HOSTS:-localhost:8787,127.0.0.1:8787}
+      UPSTREAM_TIMEOUT_SECONDS: "2"
+    ports:
+      - "127.0.0.1:8787:8080"
+    networks:
+      - servarr
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+networks:
+  servarr:
+    external: true
+    name: ${SERVARR_NETWORK:-servarr}
